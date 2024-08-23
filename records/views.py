@@ -1,26 +1,29 @@
-from django.views import View
-from django.shortcuts import render, redirect
+import base64
+# import csv
+import io
+# import math
+# import random
+# from collections import Counter
+# from datetime import datetime, timedelta
+
+import matplotlib
+matplotlib.use('Agg')  # 非GUIベースのバックエンドを使用
+import matplotlib.pyplot as plt
+# import numpy as np
+import pandas as pd
 from django.contrib.auth.mixins import LoginRequiredMixin
 # LoginRequiredMixinを継承すると
 # ログインしていないユーザーがビューにアクセスを試みるとログインページにリダイレクトする
-from .models import EntryExitLog
-from django.db.models import Max
-from collections import Counter
-import matplotlib.pyplot as plt
-import pandas as pd
-import math
-import numpy as np
-import csv
-import random
-from datetime import timedelta, datetime
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
-from xgboost import XGBRegressor
-from sklearn.multioutput import MultiOutputRegressor
+from django.shortcuts import redirect, render
+from django.views import View
+# from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error
-import matplotlib.pyplot as plt
-import io
-import base64
+from sklearn.model_selection import train_test_split
+from sklearn.multioutput import MultiOutputRegressor
+from xgboost import XGBRegressor
+
+from .models import EntryExitLog
+
 
 class LabStatusView(LoginRequiredMixin, View):
     def get(self, request):

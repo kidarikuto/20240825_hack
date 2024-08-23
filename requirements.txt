@@ -2,3 +2,8 @@ Django==4.2.*
 black
 flake8
 isort[colors]
+
+matplotlib
+pandas
+scikit-learn
+xgboost
