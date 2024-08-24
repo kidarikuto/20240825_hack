@@ -4,6 +4,7 @@ import numpy as np
 import os
 from collections import deque
 import time
+from .camera import VideoCamera
 
 # フォルダ内のすべての画像ファイルを読み込む
 def load_known_faces(directory):
@@ -25,7 +26,7 @@ directory = "media/images"
 known_face_encodings, known_face_names = load_known_faces(directory)
 
 # Webカメラを使用して顔認識を行う
-video_capture = cv2.VideoCapture(0)
+camera = VideoCamera()  # VideoCameraクラスを使用
 
 # 顔の過去の位置と状態を記録する辞書
 position_history = {}
@@ -33,7 +34,7 @@ entry_exit_state = {}
 last_seen_time = {}
 
 # フレームの幅
-frame_width = int(video_capture.get(cv2.CAP_PROP_FRAME_WIDTH))
+frame_width = int(camera.video.get(cv2.CAP_PROP_FRAME_WIDTH))
 
 # 閾値設定
 disappear_threshold = 3  # 顔が消失しても許容する秒数
@@ -42,7 +43,7 @@ disappear_threshold = 3  # 顔が消失しても許容する秒数
 last_event_time = {}
 
 while True:
-    _, frame = video_capture.read()
+    frame = camera.video.read()[1]
     rgb_frame = np.ascontiguousarray(frame[:, :, ::-1])
     face_locations = face_recognition.face_locations(rgb_frame)
     face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
@@ -65,14 +66,14 @@ while True:
         position_history[name].append(left)
 
         # フレームの左端に見切れた場合、退室を判定
-        if left < 50:  # 左端に顔の「left」座標が見切れたとき
+        if left < 50:
             if entry_exit_state.get(name) != "exited":
                 print(f"{name} 退室")
                 entry_exit_state[name] = "exited"
                 last_event_time[name] = current_time
 
         # フレームの右端に見切れた場合、入室を判定
-        elif right > frame_width - 50:  # 右端に顔の「right」座標が見切れたとき
+        elif right > frame_width - 50:
             if entry_exit_state.get(name) != "entered":
                 print(f"{name} 入室")
                 entry_exit_state[name] = "entered"
@@ -104,5 +105,5 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-video_capture.release()
+camera.video.release()
 cv2.destroyAllWindows()
