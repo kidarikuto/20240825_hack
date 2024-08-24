@@ -6,30 +6,25 @@
 
 <h1>研究室の入退室状況</h1>
 
-<h2>現在の研究室にいる人</h2>
-<p>在室人数: <strong>{{ in_lab_count }}人</strong></p>
-<!-- <ul>
-  {% for user in in_lab_users %}
-  <li>{{ user }}</li>
-  {% endfor %}
-</ul> -->
+<p>{{ request.user }} さんは現在 {{ current_user_status }} です。</p>
 
-<h2>全員の入退室ログ</h2>
+<p>在室人数: {{ in_lab_user_count }}人</p>
+
+<h2>みんなの入退室ログ</h2>
 <ul>
-  {% for log in latest_logs %}
+  {% for log in all_user_latest_logs %}
   <li>{{ log.timestamp }} - {{ log.user.username }} - {{ log.get_action_display }}</li>
   {% endfor %}
 </ul>
 
-<h2>操作</h2>
 <!-- path関数の名前空間を探索してview関数を探しpostメソッド（HTTPリクエスト）を呼び出す -->
-<form action="{% url 'records:enter_lab' %}" method="post">
+<form action="{% url 'records:in-out_toggle' %}" method="post">
   {% csrf_token %}
-  <button type="submit">入室</button>
-</form>
-<form action="{% url 'records:exit_lab' %}" method="post">
-  {% csrf_token %}
-  <button type="submit">退室</button>
+  {% if current_user_status == '入室中' %}
+  <button type="submit">退出する</button>
+  {% else %}
+  <button type="submit">入室する</button>
+  {% endif %}
 </form>
 
 {% endblock %}
