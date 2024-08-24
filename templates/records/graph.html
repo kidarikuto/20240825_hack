@@ -3,7 +3,7 @@
 {% block title %}いま{% endblock %}
 
 {% block content %}
-
+<p>{{ users }}</p>
 <h1>研究室の入退室状況</h1>
 
 <h2>現在の研究室にいる人</h2>
@@ -14,10 +14,5 @@
             <img src="data:image/png;base64,{{ plot }}" alt="Histogram {{ forloop.counter }}">
         </div>
     {% endfor %}
-
-
-
-
-</form>
 
 {% endblock %}

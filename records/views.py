@@ -23,6 +23,9 @@ from sklearn.multioutput import MultiOutputRegressor
 from xgboost import XGBRegressor
 
 from .models import EntryExitLog
+from accounts.models import User
+
+
 
 
 class LabStatusView(LoginRequiredMixin, View):
@@ -64,7 +67,8 @@ class LogGraphView(View):
         in_lab_count = len(all_logs.filter(action='IN'))-len(all_logs.filter(action='OUT'))
 
         # FIXME: 履歴を取得してデータ加工
-        users = ['user1', 'user2', 'user3', 'user4', 'user5']
+        # users = ['user1', 'user2', 'user3', 'user4', 'user5']
+        users = list(User.objects.all().values_list('username', flat=True))
         user_num=len(users)
         enter_log=[0 for i in range(user_num)]
         train_data=[]
@@ -159,5 +163,6 @@ class LogGraphView(View):
             'in_lab_users': in_lab_users,
             'in_lab_count': in_lab_count,
             'plots': plots,
+            'users': users,
         }
         return render(request, 'records/graph.html', context)
