@@ -2,6 +2,7 @@ Django==4.2.*
 black
 flake8
 isort[colors]
+Pillow
 
 matplotlib
 pandas
