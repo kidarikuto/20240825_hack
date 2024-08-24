@@ -30,29 +30,33 @@ from accounts.models import User
 
 class LabStatusView(LoginRequiredMixin, View):
     def get(self, request):
-        all_logs = EntryExitLog.objects.all()
-        latest_logs = EntryExitLog.objects.all().order_by('-timestamp')[:10]
-        in_lab_users = [
-            log.user.username for log in latest_logs if log.action == 'IN'
-        ]
-        in_lab_count = len(all_logs.filter(action='IN'))-len(all_logs.filter(action='OUT'))
+        current_user_latest_log = EntryExitLog.objects.filter(user=request.user).order_by('-timestamp').first()
+        if current_user_latest_log is None:
+            current_user_status = '記録なし'
+        elif current_user_latest_log.action == 'IN':
+            current_user_status = '入室中'
+        else:
+            current_user_status = '退室中'
+        in_lab_user_count = EntryExitLog.objects.filter(action='IN').count() - EntryExitLog.objects.filter(action='OUT').count()
+        all_user_latest_logs = EntryExitLog.objects.all().order_by('-timestamp')[:10]
 
         return render(request, 'records/status.html', {
-            'latest_logs': latest_logs,
-            'in_lab_users': in_lab_users,
-            'in_lab_count': in_lab_count
+            'current_user_status': current_user_status,
+            'in_lab_user_count': in_lab_user_count,
+            'all_user_latest_logs': all_user_latest_logs,
         })
 
-class EnterLabView(LoginRequiredMixin, View):
-    # postリクエストが送信されたときに実行
-    def post(self, request):
-        EntryExitLog.objects.create(user=request.user, action='IN')
-        return redirect('records:lab_status')
 
-class ExitLabView(LoginRequiredMixin, View):
+class EnterExitToggleView(LoginRequiredMixin, View):
     # postリクエストが送信されたときに実行
     def post(self, request):
-        EntryExitLog.objects.create(user=request.user, action='OUT')
+        current_user_latest_log = EntryExitLog.objects.filter(user=request.user).order_by('-timestamp').first()
+
+        if current_user_latest_log is None or current_user_latest_log.action == 'OUT':
+            EntryExitLog.objects.create(user=request.user, action='IN')
+        else:
+            EntryExitLog.objects.create(user=request.user, action='OUT')
+
         return redirect('records:lab_status')
 
 # kidaが作成
