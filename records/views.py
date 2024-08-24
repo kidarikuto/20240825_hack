@@ -176,9 +176,6 @@ class LogGraphView(View):
         return render(request, 'records/graph.html', context)
 
 
-# =================================
-# ここから
-# =================================
 def gen(camera):
     while True:
         # カメラ画像1フレーム取得
@@ -187,16 +184,13 @@ def gen(camera):
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
         
-# =================================
-#  web routing '/' → index
-# =================================
-def index(request):
-    return render(request ,'index.html')
 
-# =================================
-#  web routing '/capture' → capture
-#  ※index内にインラインフレームで表示
-# =================================
+# records/face/
+def index(request):
+    return render(request ,'records/index.html')
+
+# records/face/capture/
+# index内にインラインフレームで表示
 @ gzip.gzip_page
 @ xframe_options_exempt
 def capture(request):

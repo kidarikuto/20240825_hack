@@ -8,3 +8,7 @@ matplotlib
 pandas
 scikit-learn
 xgboost
+
+opencv-python
+face_recognition
+numpy
