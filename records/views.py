@@ -140,28 +140,52 @@ class LogGraphView(LoginRequiredMixin,View):
             tmp_sum=output_data[i].sum()
             tmp_sum=pd.DataFrame(tmp_sum).T
             result=pd.concat([result,tmp_sum],ignore_index=True)
+
         # ヒストグラムを保存するためのリスト
         plots = []
         weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+
         for i in range(len(result)):
-            # rgbaで色を指定、aは透明度
-            max_val_index=result.iloc[i].idxmax()
-            colors=["red" if x==max_val_index else "blue" for x in result.iloc[i].index]
-            colors = [(1, 0, 0.2, 0.7) if color == 'red' else (0, 0.5, 1, 0.7) for color in colors]
+            max_val_index = result.iloc[i].idxmax()
+
+            # 色を指定 (透明度を含むRGBA形式)
+            colors = ["red" if x == max_val_index else "blue" for x in result.iloc[i].index]
+            colors = [(1, 0, 0.5, 0.7) if color == 'red' else (0, 0.5, 1, 0.7) for color in colors]
 
             plt.figure(figsize=(8, 4))
-            result.iloc[i].plot(kind='bar',color=colors,width=1)
-            plt.title(f'{weekdays[i]}')
-            plt.xlabel('Time Range',weight='bold')
-            plt.ylabel('Attendance\nPrediction',weight='bold', rotation="horizontal", labelpad=30)
+
+            # 棒グラフの描画
+            ax = plt.gca()
+            width = 0.8
+            bar_roundness = 0.2
+
+            for j, (x, y) in enumerate(zip(result.iloc[i].index, result.iloc[i].values)):
+                # 棒の位置を設定
+                rect = patches.FancyBboxPatch(
+                    (j - width / 2, 0), width, y, 
+                    boxstyle=f"round,pad=0.02,rounding_size={bar_roundness}",
+                    linewidth=1, facecolor=colors[j], edgecolor=colors[j]
+                )
+                ax.add_patch(rect)
+
+            # 軸とタイトルの設定
+            ax.set_xlim(-0.5, len(result.iloc[i].index) - 0.5)
+            ax.set_ylim(0, max(result.iloc[i].values) + 1)
+            ax.set_xticks(range(len(result.iloc[i].index)))
+            ax.set_xticklabels(result.iloc[i].index)
+            plt.title(f'{weekdays[i]}', weight='bold')
+            plt.xlabel('Time Range', weight='bold')
+            plt.ylabel('Attendance\nPrediction', weight='bold', rotation="horizontal", labelpad=30)
             plt.xticks(rotation=0)
-            plt.tight_layout() #レイアウト自動調整
+            plt.tight_layout()
+
             # 画像をバイナリデータに変換
             buffer = io.BytesIO()
             plt.savefig(buffer, format='png')
             buffer.seek(0)
             image_png = buffer.getvalue()
             buffer.close()
+
             # バイナリデータをbase64でエンコードしてHTMLで埋め込めるようにする
             graphic = base64.b64encode(image_png)
             graphic = graphic.decode('utf-8')
