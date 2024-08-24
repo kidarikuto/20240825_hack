@@ -8,6 +8,7 @@ import io
 
 import matplotlib
 matplotlib.use('Agg')  # 非GUIベースのバックエンドを使用
+import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 # import numpy as np
 import pandas as pd
@@ -60,7 +61,7 @@ class EnterExitToggleView(LoginRequiredMixin, View):
         return redirect('records:lab_status')
 
 # kidaが作成
-class LogGraphView(View):
+class LogGraphView(LoginRequiredMixin,View):
     def get(self, request):
         
         all_logs = EntryExitLog.objects.all()
@@ -139,17 +140,22 @@ class LogGraphView(View):
             tmp_sum=output_data[i].sum()
             tmp_sum=pd.DataFrame(tmp_sum).T
             result=pd.concat([result,tmp_sum],ignore_index=True)
-
-        # グラフを作成        
         # ヒストグラムを保存するためのリスト
         plots = []
         weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         for i in range(len(result)):
+            # rgbaで色を指定、aは透明度
+            max_val_index=result.iloc[i].idxmax()
+            colors=["red" if x==max_val_index else "blue" for x in result.iloc[i].index]
+            colors = [(1, 0, 0.2, 0.7) if color == 'red' else (0, 0.5, 1, 0.7) for color in colors]
+
             plt.figure(figsize=(8, 4))
-            result.iloc[i].plot(kind='bar')
+            result.iloc[i].plot(kind='bar',color=colors,width=1)
             plt.title(f'{weekdays[i]}')
-            plt.xlabel('Range')
-            plt.ylabel('Expected number of people')
+            plt.xlabel('Time Range',weight='bold')
+            plt.ylabel('Attendance\nPrediction',weight='bold', rotation="horizontal", labelpad=30)
+            plt.xticks(rotation=0)
+            plt.tight_layout() #レイアウト自動調整
             # 画像をバイナリデータに変換
             buffer = io.BytesIO()
             plt.savefig(buffer, format='png')
