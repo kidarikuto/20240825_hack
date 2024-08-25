@@ -5,6 +5,7 @@ import io
 # import random
 # from collections import Counter
 # from datetime import datetime, timedelta
+import os
 
 import matplotlib
 matplotlib.use('Agg')  # 非GUIベースのバックエンドを使用
@@ -153,7 +154,9 @@ class LogGraphView(LoginRequiredMixin,View):
        
 
         # FIXME: 日本語フォントを指定
-        jpn_fonts=list(np.sort([ttf for ttf in fm.findSystemFonts() if 'ipaexg' in ttf or 'msgothic' in ttf or 'japan' in ttf or 'ipafont' in ttf]))
+        # jpn_fonts=list(np.sort([ttf for ttf in fm.findSystemFonts() if 'ipaexg' in ttf or 'msgothic' in ttf or 'japan' in ttf or 'ipafont' in ttf]))
+        font_folder = 'fonts/'
+        jpn_fonts = list(np.sort([os.path.join(font_folder, ttf) for ttf in os.listdir(font_folder) if 'ipaexg' in ttf or 'msgothic' in ttf or 'japan' in ttf or 'ipafont' in ttf]))
         jpn_font=jpn_fonts[0]
         prop = fm.FontProperties(fname=jpn_font)
         
