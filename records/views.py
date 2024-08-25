@@ -10,7 +10,8 @@ import matplotlib
 matplotlib.use('Agg')  # 非GUIベースのバックエンドを使用
 import matplotlib.patches as patches
 import matplotlib.pyplot as plt
-# import numpy as np
+import matplotlib.font_manager as fm
+import numpy as np
 import pandas as pd
 from django.contrib.auth.mixins import LoginRequiredMixin
 # LoginRequiredMixinを継承すると
@@ -140,25 +141,33 @@ class LogGraphView(LoginRequiredMixin,View):
             tmp_sum=output_data[i].sum()
             tmp_sum=pd.DataFrame(tmp_sum).T
             result=pd.concat([result,tmp_sum],ignore_index=True)
+        print(f'{result=}')
+       
 
+        # FIXME: 日本語フォントを指定
+        jpn_fonts=list(np.sort([ttf for ttf in fm.findSystemFonts() if 'ipaexg' in ttf or 'msgothic' in ttf or 'japan' in ttf or 'ipafont' in ttf]))
+        jpn_font=jpn_fonts[0]
+        prop = fm.FontProperties(fname=jpn_font)
+        
+
+        
+        plt.rcParams['font.family'] = prop.get_name()
         # ヒストグラムを保存するためのリスト
         plots = []
-        weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        weekdays = ['月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日', '日曜日']
 
         for i in range(len(result)):
             max_val_index = result.iloc[i].idxmax()
 
-            # 色を指定 (透明度を含むRGBA形式)
+            # 色を指定 (A=透明度を含むRGBA形式)
             colors = ["red" if x == max_val_index else "blue" for x in result.iloc[i].index]
             colors = [(1, 0, 0.5, 0.7) if color == 'red' else (0, 0.5, 1, 0.7) for color in colors]
 
-            plt.figure(figsize=(8, 4))
-
             # 棒グラフの描画
-            ax = plt.gca()
+            plt.figure(figsize=(8, 4))
+            ax = plt.gca() # gca()は現在の軸を取得する関数
             width = 0.8
-            bar_roundness = 0.2
-
+            bar_roundness = 0.2 # 棒グラフの角の丸みを設定
             for j, (x, y) in enumerate(zip(result.iloc[i].index, result.iloc[i].values)):
                 # 棒の位置を設定
                 rect = patches.FancyBboxPatch(
@@ -166,16 +175,16 @@ class LogGraphView(LoginRequiredMixin,View):
                     boxstyle=f"round,pad=0.02,rounding_size={bar_roundness}",
                     linewidth=1, facecolor=colors[j], edgecolor=colors[j]
                 )
-                ax.add_patch(rect)
+                ax.add_patch(rect) # バーをプロットに追加
 
             # 軸とタイトルの設定
             ax.set_xlim(-0.5, len(result.iloc[i].index) - 0.5)
             ax.set_ylim(0, max(result.iloc[i].values) + 1)
-            ax.set_xticks(range(len(result.iloc[i].index)))
+            ax.set_xticks(range(len(result.iloc[i].index))) # X軸の目盛り位置を設定
             ax.set_xticklabels(result.iloc[i].index)
             plt.title(f'{weekdays[i]}', weight='bold')
-            plt.xlabel('Time Range', weight='bold')
-            plt.ylabel('Attendance\nPrediction', weight='bold', rotation="horizontal", labelpad=30)
+            plt.xlabel('時間帯', weight='bold')
+            plt.ylabel('人数予測値', weight='bold', rotation="horizontal", labelpad=30)
             plt.xticks(rotation=0)
             plt.tight_layout()
 
@@ -192,6 +201,8 @@ class LogGraphView(LoginRequiredMixin,View):
             plots.append(graphic)
             plt.close()
 
+        print(jpn_font)
+        
         context = {
             'latest_logs': latest_logs,
             'in_lab_users': in_lab_users,
