@@ -3,10 +3,19 @@
 {% block title %}ログイン{% endblock %}
 
 {% block content %}
-<h1>ログイン</h1>
+<h2>ログイン</h2>
 <form method="post">
-  {{ form.as_p }}
   {% csrf_token %}
-  <button type="submit">ログイン</button>
+  <div class="mb-3">
+    {{ form.username.label_tag }}
+    {{ form.username|add_class:"form-control" }}
+    <div class="form-text text-muted">{{ form.username.help_text }}</div>
+  </div>
+  <div class="mb-3">
+    {{ form.password.label_tag }}
+    {{ form.password|add_class:"form-control" }}
+    <div class="form-text text-muted">{{ form.face_image.help_text }}</div>
+  </div>
+  <button type="submit" class="btn btn-primary">ログイン</button>
 </form>
 {% endblock %}
