@@ -3,6 +3,7 @@ black
 flake8
 isort[colors]
 Pillow
+django-bootstrap5
 
 matplotlib
 pandas
