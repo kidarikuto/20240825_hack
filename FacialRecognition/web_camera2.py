@@ -21,7 +21,7 @@ def load_known_faces(directory):
     return known_face_encodings, known_face_names
 
 # 画像の保存されているフォルダを指定
-directory = "media/images"
+directory = "images"
 known_face_encodings, known_face_names = load_known_faces(directory)
 
 # Webカメラを使用して顔認識を行う
