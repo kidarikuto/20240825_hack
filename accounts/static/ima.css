@@ -1,0 +1,14 @@
+/* ima.css */
+
+/* ボタンのスタイルをカスタマイズする例 */
+.btn-danger {
+    background-color: red;
+    border-color: red;
+}
+
+.btn-success {
+    background-color: green;
+    border-color: green;
+}
+
+/* 追加のカスタムスタイルをここに記述 */

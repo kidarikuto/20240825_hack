@@ -3,10 +3,29 @@
 {% block title %}登録{% endblock %}
 
 {% block content %}
-<h1>ユーザー登録</h1>
+<h2>ユーザー登録</h2>
 <form method="post" enctype="multipart/form-data">
-  {{ form.as_p }}
   {% csrf_token %}
-  <button type="submit">登録</button>
+  <div class="mb-3">
+    {{ form.username.label_tag }}
+    {{ form.username }}
+    <div class="form-text text-muted">{{ form.username.help_text }}</div>
+  </div>
+  <div class="mb-3">
+    {{ form.face_image.label_tag }}
+    {{ form.face_image }}
+    <div class="form-text text-muted">{{ form.face_image.help_text }}</div>
+  </div>
+  <div class="mb-3">
+    {{ form.password1.label_tag }}
+    {{ form.password1 }}
+    <div class="form-text text-muted">{{ form.password1.help_text }}</div>
+  </div>
+  <div class="mb-3">
+    {{ form.password2.label_tag }}
+    {{ form.password2 }}
+    <div class="form-text text-muted">{{ form.password2.help_text }}</div>
+  </div>
+  <button type="submit" class="btn btn-primary">登録</button>
 </form>
 {% endblock %}

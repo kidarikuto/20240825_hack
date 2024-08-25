@@ -28,6 +28,10 @@ from .models import EntryExitLog
 from accounts.models import User
 
 
+from django.http import StreamingHttpResponse
+from django.views.decorators import gzip
+from django.views.decorators.clickjacking import xframe_options_exempt
+from .camera import VideoCamera
 
 
 class LabStatusView(LoginRequiredMixin, View):
@@ -216,3 +220,24 @@ class LogGraphView(LoginRequiredMixin,View):
             'users': users,
         }
         return render(request, 'records/graph.html', context)
+
+
+def gen(camera):
+    while True:
+        # カメラ画像1フレーム取得
+        frame = camera.get_frame()
+        # 1フレームデータ返却
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+        
+
+# records/face/
+def index(request):
+    return render(request ,'records/index.html')
+
+# records/face/capture/
+# index内にインラインフレームで表示
+@ gzip.gzip_page
+@ xframe_options_exempt
+def capture(request):
+    return StreamingHttpResponse(gen(VideoCamera()),content_type='multipart/x-mixed-replace; boundary=frame')

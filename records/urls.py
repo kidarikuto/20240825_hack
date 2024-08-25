@@ -9,4 +9,6 @@ urlpatterns = [
     path('toggle/', views.EnterExitToggleView.as_view(), name='in-out_toggle'),
     path('graph/', views.LogGraphView.as_view(), name='log_graph'),
     path('loading/', views.LoadingView.as_view(), name='loading'),
+    path('face/', views.index, name='face_index'),
+    path('face/capture/', views.capture, name='face_capture'),
 ]
