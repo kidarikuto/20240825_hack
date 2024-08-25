@@ -7,14 +7,35 @@
 
 <h1>研究室の入退室状況</h1>
 
-<p>{{ request.user }} さんは現在 {{ current_user_status }} です。</p>
+<p>
+  <span style="color: blue;">{{ request.user }}</span> さんは現在
+  {% if current_user_status == "入室中" %}
+  <span style="color: green;">入室中</span>
+  {% elif current_user_status == "退室中" %}
+  <span style="color: red;">退室中</span>
+  {% else %}
+  <span>不明</span>
+  {% endif %}
+  です。
+</p>
+
+
 
 <p>在室人数: {{ in_lab_user_count }}人</p>
 
 <h2>みんなの入退室ログ</h2>
 <ul>
   {% for log in all_user_latest_logs %}
-  <li>{{ log.timestamp }} - {{ log.user.username }} - {{ log.get_action_display }}</li>
+  <li>
+    {{ log.timestamp }} - {{ log.user.username }} -
+    {% if log.get_action_display == "退室" %}
+    <span style="color: red;">{{ log.get_action_display }}</span>
+    {% elif log.get_action_display == "入室" %}
+    <span style="color: green;">{{ log.get_action_display }}</span>
+    {% else %}
+    {{ log.get_action_display }}
+    {% endif %}
+  </li>
   {% endfor %}
 </ul>
 
