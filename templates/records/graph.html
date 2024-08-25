@@ -1,18 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}いま{% endblock %}
+{% block title %}研究室の入退室状況{% endblock %}
 
 {% block content %}
-<p>{{ users }}</p>
-<h1>研究室の入退室状況</h1>
+<div class="container text-center" style="margin-top: 50px;">
+    <h1>研究室の入退室状況</h1>
+    <p>在室人数: <strong>{{ in_lab_count }}人</strong></p>
 
-<h2>現在の研究室にいる人</h2>
-<p>在室人数: <strong>{{ in_lab_count }}人</strong></p>
-<h1>Weekday Histograms</h1>
-    {% for plot in plots %}
-        <div>
-            <img src="data:image/png;base64,{{ plot }}" alt="Histogram {{ forloop.counter }}">
-        </div>
-    {% endfor %}
-
+    <h1>来週の入室予測</h1>
+    <div class="row justify-content-center">
+        {% for plot, weekday in plots_weekdays %}
+            <div class="col-12 md-6 graph-container" style="margin-bottom: 100px;">
+                <h2>{{ weekday }}</h2>
+                <img src="data:image/png;base64,{{ plot }}" alt="Histogram {{ forloop.counter }}" class="img-fluid">
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

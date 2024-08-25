@@ -21,9 +21,9 @@
 <form action="{% url 'records:in-out_toggle' %}" method="post">
   {% csrf_token %}
   {% if current_user_status == '入室中' %}
-  <button type="submit">退出する</button>
+  <button type="submit" class="btn btn-primary">退出する</button>
   {% else %}
-  <button type="submit">入室する</button>
+  <button type="submit" class="btn btn-primary">入室する</button>
   {% endif %}
 </form>
 
