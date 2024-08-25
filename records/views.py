@@ -62,6 +62,10 @@ class EnterExitToggleView(LoginRequiredMixin, View):
         return redirect('records:lab_status')
 
 # kidaが作成
+class LoadingView(LoginRequiredMixin,View):
+    def get(self, request):
+        return render(request, 'records/loading.html')
+
 class LogGraphView(LoginRequiredMixin,View):
     def get(self, request):
         
@@ -182,9 +186,9 @@ class LogGraphView(LoginRequiredMixin,View):
             ax.set_ylim(0, max(result.iloc[i].values) + 1)
             ax.set_xticks(range(len(result.iloc[i].index))) # X軸の目盛り位置を設定
             ax.set_xticklabels(result.iloc[i].index)
-            plt.title(f'{weekdays[i]}', weight='bold')
-            plt.xlabel('時間帯', weight='bold')
-            plt.ylabel('人数予測値', weight='bold', rotation="horizontal", labelpad=30)
+            # plt.title(f'{weekdays[i]}', weight='bold')
+            # plt.xlabel('時間帯', weight='bold')
+            # plt.ylabel('人数予測値', weight='bold', rotation="horizontal", labelpad=30)
             plt.xticks(rotation=0)
             plt.tight_layout()
 
@@ -202,12 +206,13 @@ class LogGraphView(LoginRequiredMixin,View):
             plt.close()
 
         print(jpn_font)
+        plots_weekdays = zip(plots,weekdays)
         
         context = {
             'latest_logs': latest_logs,
             'in_lab_users': in_lab_users,
             'in_lab_count': in_lab_count,
-            'plots': plots,
+            'plots_weekdays': plots_weekdays,
             'users': users,
         }
         return render(request, 'records/graph.html', context)

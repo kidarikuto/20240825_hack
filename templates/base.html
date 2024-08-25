@@ -1,9 +1,13 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ja">
 
 <head>
   <meta charset="UTF-8" />
   <title>{% block title %}入退室{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/global.css' %}" type="text/css">
+  <!-- Bootstrap CSS CDN -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -11,11 +15,11 @@
     {% if request.user.is_authenticated %}
     <a href="{% url 'accounts:logout' %}">ログアウト</a>
     <a href="{% url 'records:lab_status' %}">いま</a>
-    <a href="{% url 'records:log_graph' %}">グラフ</a>
+    <a href="{% url 'records:loading' %}">グラフ</a>
     {% else %}
     <a href="{% url 'accounts:login' %}">ログイン</a>
     <a href="{% url 'accounts:signup' %}">登録</a>
-    <a href="{% url 'records:log_graph' %}">グラフ</a>
+    <a href="{% url 'records:loading' %}">グラフ</a>
     {% endif %}
   </header>
   <div>
