@@ -1,13 +1,13 @@
-from django.db import models
 from django.contrib.auth import get_user_model
-
+from django.db import models
 
 User = get_user_model()
 
 ACTION_CHOICES = (
-    ('IN', '入室'),
-    ('OUT', '退室'),
+    ("IN", "入室"),
+    ("OUT", "退室"),
 )
+
 
 class EntryExitLog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

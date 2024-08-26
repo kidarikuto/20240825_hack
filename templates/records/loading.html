@@ -1,34 +1,33 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>リダイレクト中...</title>
-    {% load static %}
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .loading-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <div class="loading-container">
-        <h1>グラフ作成中...</h1>
-        <div class="spinner-border" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-    </div>
+{% extends "base.html" %}
+{% load static % }
 
-    <script>
-        window.onload = function() {
-            window.location.href = "{% url 'records:log_graph' %}";
-        };
-    </script>
-</body>
-</html>
+{% block title %}リダイレクト中...{% endblock %}
+
+{% block extra_css %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    .loading-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="loading-container">
+    <h1>グラフ作成中...</h1>
+    <div class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        window.location.href = "{% url 'records:log_graph' %}";
+    };
+</script>
+{% endblock %}

@@ -1,13 +1,12 @@
-<html>
+{% extends "base.html" %}
+{% load static %}
 
-<head>
-  {% load static %}
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css">
-</head>
+{% block title %}顔認証{% endblock %}
 
-<body>
-  <iframe id="capture-view" src="{% url 'records:face_capture' %}"></iframe>
-</body>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css">
+{% endblock %}
 
-</html>
+{% block content %}
+<iframe id="capture-view" src="{% url 'records:face_capture' %}"></iframe>
+{% endblock %}

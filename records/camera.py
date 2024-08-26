@@ -1,8 +1,9 @@
+import os
 
 import cv2
 import face_recognition
 import numpy as np
-import os
+
 
 class VideoCamera(object):
     def __init__(self):
@@ -10,11 +11,10 @@ class VideoCamera(object):
         self.video = cv2.VideoCapture(0)
         self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
         self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
-        self.video.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('H', '2', '6', '4'))
-        
+        self.video.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc("H", "2", "6", "4"))
+
         # 顔認識用の設定
         self.known_face_encodings, self.known_face_names = self.load_known_faces("media/images")
-
 
     def __del__(self):
         # カメラ停止
@@ -46,7 +46,7 @@ class VideoCamera(object):
         ret, frame = self.video.read()
         if not ret:
             return None
-        
+
         # 顔認識処理
         rgb_frame = np.ascontiguousarray(frame[:, :, ::-1])
         face_locations = face_recognition.face_locations(rgb_frame)
@@ -67,5 +67,5 @@ class VideoCamera(object):
             cv2.putText(frame, name, (left + 6, bottom - 6), cv2.FONT_HERSHEY_TRIPLEX, 1.0, (255, 255, 255), 2)
 
         # byteデータに変換
-        ret, jpeg = cv2.imencode('.jpg', frame)
+        ret, jpeg = cv2.imencode(".jpg", frame)
         return jpeg.tobytes()
