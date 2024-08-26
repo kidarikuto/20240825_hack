@@ -1,13 +1,12 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth import login, authenticate
+from django.conf import settings
+from django.contrib.auth import authenticate, get_user_model, login
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
-from django.conf import settings
 
 from .forms import SignupForm
 
-
 User = get_user_model()
+
 
 class SignupView(CreateView):
     form_class = SignupForm
