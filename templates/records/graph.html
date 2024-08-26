@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}研究室の入退室状況{% endblock %}
+{% block title %}入室予測{% endblock %}
 
 {% block content %}
 <div class="container text-center" style="margin-top: 50px;">
@@ -10,10 +10,10 @@
     <h1>来週の入室予測</h1>
     <div class="row justify-content-center">
         {% for plot, weekday in plots_weekdays %}
-            <div class="col-12 md-6 graph-container" style="margin-bottom: 100px;">
-                <h2>{{ weekday }}</h2>
-                <img src="data:image/png;base64,{{ plot }}" alt="Histogram {{ forloop.counter }}" class="img-fluid">
-            </div>
+        <div class="col-12 md-6 graph-container" style="margin-bottom: 100px;">
+            <h2>{{ weekday }}</h2>
+            <img src="data:image/png;base64,{{ plot }}" alt="Histogram {{ forloop.counter }}" class="img-fluid">
+        </div>
         {% endfor %}
     </div>
 </div>

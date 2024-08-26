@@ -6,9 +6,10 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>{% block title %}入退室{% endblock %}</title>
+  <title>ラボウォッチャー | {% block title %}{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'css/global.css' %}" type="text/css">
   <link rel="stylesheet" href="{% static 'css/ima.css' %}" type="text/css">
+  {% block extra_css %}{% endblock %}
   {% bootstrap_css %}
   {% bootstrap_javascript %}
 </head>
