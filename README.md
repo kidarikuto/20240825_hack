@@ -1,6 +1,6 @@
 <div align="center">
   <img src="https://github.com/user-attachments/assets/e473e579-935b-48c4-ab40-689f26ee1f64">
-  <h3>ラボウォッチ - 研究室の入室状況を管理・閲覧できるサービス</p>
+  <p><b>ラボウォッチ - 研究室の入室状況を管理・閲覧できるサービス</b></p>
 </div>
 <hr>
 
