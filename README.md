@@ -75,6 +75,8 @@ $ source venv/bin/activate
 
 
 ## 備考
+[ハッカソン主催公式Xの投稿](https://x.com/geek_pjt/status/1827625601286668299?s=46)
+
 <details>
 <summary>感想</summary>
 
