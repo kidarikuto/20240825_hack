@@ -3,7 +3,6 @@ import io
 import os
 
 import matplotlib
-
 matplotlib.use("Agg")  # 非GUIベースのバックエンドを使用
 import matplotlib.font_manager as fm
 import matplotlib.patches as patches
@@ -12,26 +11,22 @@ import numpy as np
 import pandas as pd
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.http import StreamingHttpResponse
 # LoginRequiredMixinを継承すると
 # ログインしていないユーザーがビューにアクセスを試みるとログインページにリダイレクトする
 from django.shortcuts import redirect, render
 from django.views import View
+from django.views.decorators import gzip
+from django.views.decorators.clickjacking import xframe_options_exempt
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
 from sklearn.multioutput import MultiOutputRegressor
 from xgboost import XGBRegressor
 
+from .camera import VideoCamera
 from .models import EntryExitLog
 
 User = get_user_model()
-
-
-from django.http import StreamingHttpResponse
-from django.views.decorators import gzip
-from django.views.decorators.clickjacking import xframe_options_exempt
-
-from .camera import VideoCamera
 
 
 class LabStatusView(LoginRequiredMixin, View):
