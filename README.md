@@ -29,6 +29,40 @@
 <br>
 
 
+## 要件
+- git
+- python
+- virtualenv
+- pip
+- libomp
+- cmake
+<br>
+
+
+## 使い方
+```
+# リポジトリをクローン
+$ git clone https://github.com/harune-pg/geek_hackathon_vol13_team22.git
+$ cd geek_hackathon_vol13_team22
+
+# 仮想環境を構築
+$ python -m venv venv
+$ source venv/bin/activate
+(venv) $ pip install -r requirements.txt
+
+# マイグレーションを実施
+(venv) $ python manage.py migrate
+
+# 初期データを読み込む
+(venv) $ python manage.py loaddata accounts/fixture/fixture1.json records/fixture/fixture2.json
+
+# アプリケーションを起動
+(venv) $ python manage.py runserver
+```
+http://127.0.0.1:8000/records/status/
+<br>
+
+
 ## 各機能紹介
 <div style="display: flex; align-items: center; justify-content: space-around;">
   <img src="https://github.com/user-attachments/assets/21e4d728-dc11-48c6-9f81-499ac791de51" width="45%">
@@ -36,4 +70,11 @@
   <img src="https://github.com/user-attachments/assets/96b5a514-99f3-4806-813a-d3834ba1834e" width="45%">
   <img src="https://github.com/user-attachments/assets/4ff198b1-7dd4-463a-8030-eabce172c6aa" width="45%">
 </div>
+<br>
+
+
+## 製作者
+- [@harune-pg](https://github.com/harune-pg)
+- [@kidarikuto](https://github.com/kidarikuto)
+- [@Yukumo-Job](https://github.com/Yukumo-Job)
 <br>
